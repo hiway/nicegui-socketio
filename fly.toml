@@ -23,43 +23,13 @@ processes = []
   allowed_public_ports = []
   auto_rollback = true
 
-[[services]]
+[http_service]
   internal_port = 8080
-  processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
-  [services.concurrency]
-    hard_limit = 500
-    soft_limit = 400
-    type = "connections"
-
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
-
-  [[services.tcp_checks]]
-    interval = "10s"
-    grace_period = "2m"
-    restart_limit = 3
-    timeout = "5s"
-
-  [[services.http_checks]]
-    interval = "20s"
-    grace_period = "4m"
-    restart_limit = 3
-    timeout = "10s"
-    method = "GET"
-    path = "/"
-    protocol = "http"
-    tls_skip_verify = false
-    [services.http_checks.headers]
-      # Host = ["marketype-nicegui.fly.dev"]
-
-  [metrics]
-  port = 9062
-  path = "/metrics"
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
