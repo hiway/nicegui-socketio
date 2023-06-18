@@ -16,9 +16,12 @@ async def timed_job():
     global progress
     try:
         await sio.emit("progress", progress / 100, namespace="/test")
-        progress += random.randint(1, 10)
-        if progress > 100:
+        if progress == 100:
             progress = 0
+        elif progress > 100:
+            progress = 100
+        else:
+            progress += random.randint(1, 10)
     except BadNamespaceError:
         pass
 
