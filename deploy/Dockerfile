@@ -24,4 +24,8 @@ RUN poetry install --no-root
 
 EXPOSE 8080
 
-CMD honcho start
+CMD fallocate -l 1024M /_swapfile && \
+    mkswap /_swapfile && \
+    chmod 0600 /_swapfile && \
+    swapon /_swapfile && \
+    honcho start
