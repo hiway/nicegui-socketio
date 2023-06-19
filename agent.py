@@ -20,7 +20,7 @@ class Agent(AsyncNamespace):
             for handler in self._event_handlers[frame["name"]]:
                 await handler(frame["data"])
 
-    def ON(self, name: str):
+    def on(self, name: str):
         def wrapper(coro):
             if name in self._event_handlers:
                 self._event_handlers[name].append(coro)

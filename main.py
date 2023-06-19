@@ -7,7 +7,6 @@ from agent import Agent
 progress = 0
 progress_too = 0
 agent = Agent(name="hello", sio=sio, namespace="/agent")
-# agent = Agent(namespace="/agent")
 sio.register_namespace(agent)
 
 
@@ -37,7 +36,7 @@ async def on_progress(sid, value):
     progress_bar.refresh()
 
 
-@agent.ON("progress-too")
+@agent.on("progress-too")
 async def on_progress_too(value):
     global progress_too
     progress_too = value
