@@ -12,8 +12,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - && \
 
 WORKDIR /app
 
-COPY main.py \
-    client.py \
+COPY *.py \
     Procfile \
     pyproject.toml \
     README.md \
