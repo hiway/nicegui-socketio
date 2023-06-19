@@ -23,7 +23,6 @@ async def main(client: Client):
         ui.markdown("# Hello world!")
         progress_bar()
         ui.markdown("Progressing bars, please don't wait…")
-        
 
 
 ui.run()
