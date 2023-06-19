@@ -1,25 +1,19 @@
 import asyncio
 import random
-import socketio
+
 from socketio.exceptions import BadNamespaceError
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-
-sio = socketio.AsyncClient()
-scheduler = AsyncIOScheduler()
+from agent import Agent
 
 progress = 0
+agent = Agent(name="hello")
 
 
-@scheduler.scheduled_job("interval", seconds=2)
+@agent.on_interval(seconds=2)
 async def timed_job():
     global progress
     try:
-        await sio.emit("frame", {
-            "kind": "event",
-            "name": "progress-too",
-            "data": progress / 100,
-        }, namespace="/agent")
+        await agent.emit("progress-too", progress / 100)
         print(f"Sent: {progress}")
         if progress == 100:
             progress = 0
@@ -32,28 +26,17 @@ async def timed_job():
 
 
 async def main():
-    scheduler.start()
-    while True:
+    try:
         await asyncio.sleep(3)
-        try:
-            print("Connecting...")
-            await sio.connect(
-                "ws://localhost:8080",
-                namespaces=["/agent"],
-                socketio_path="/_nicegui_ws/socket.io",
-            )
-            scheduler.resume()
-            await sio.wait()
-        except asyncio.exceptions.CancelledError:
-            print("\nStopping...")
-            await sio.disconnect()
-            break
-        finally:
-            print("Disconnecting...")
-            scheduler.pause()
-            await sio.disconnect()
-            await asyncio.sleep(0.2)
-    scheduler.shutdown()
+        await agent.connect("ws://localhost:8080")
+        await agent.start()
+        while True:
+            await asyncio.sleep(1)
+    except asyncio.exceptions.CancelledError:
+        print("\nStopping...")
+    finally:
+        await agent.stop()
+        await agent.disconnect()
 
 
 if __name__ == "__main__":

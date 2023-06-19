@@ -6,8 +6,7 @@ from agent import Agent
 
 progress = 0
 progress_too = 0
-agent = Agent(name="hello", sio=sio, namespace="/agent")
-sio.register_namespace(agent)
+agent = Agent(name="hello", sio=sio)
 
 
 @ui.refreshable
