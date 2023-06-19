@@ -34,7 +34,7 @@ async def timed_job():
 async def main():
     scheduler.start()
     while True:
-        # await asyncio.sleep(10)
+        await asyncio.sleep(3)
         try:
             print("Connecting...")
             await sio.connect(
