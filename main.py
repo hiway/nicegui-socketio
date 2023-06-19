@@ -24,8 +24,8 @@ async def main(client: Client):
     with ui.column().classes("absolute-center items-center"):
         ui.markdown("# Hello world!")
         progress_bar()
+        ui.markdown("Progressing bars, please don't wait…").classes("pt-2")
         progress_bar_too()
-        ui.markdown("Progressing bars, please don't wait…")
 
 
 @sio.on("progress", namespace="/test")  # type: ignore
